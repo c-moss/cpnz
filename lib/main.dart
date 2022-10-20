@@ -13,21 +13,22 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final Map<String, Circle> _circles = {};
+  late final locations.Locations _mapData;
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    final googleOffices = await locations.getGoogleOffices();
+    _mapData = await locations.getMapData();
     setState(() {
       _circles.clear();
-      for (final office in googleOffices.offices) {
+      for (final hotspot in _mapData.hotspots) {
         final circle = Circle(
-          circleId: CircleId(office.name),
+          circleId: CircleId(hotspot.name),
           radius: 200,
-          center: LatLng(office.lat, office.lng),
+          center: LatLng(hotspot.lat, hotspot.lng),
           fillColor: Color.fromARGB(125, 141, 42, 0),
           strokeColor: Color.fromARGB(255, 141, 42, 0),
           consumeTapEvents: true,
           onTap: () {},
         );
-        _circles[office.name] = circle;
+        _circles[hotspot.name] = circle;
       }
     });
   }
@@ -37,7 +38,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Google Office Locations'),
+          title: const Text('Crime Hotspots'),
           backgroundColor: Colors.green[700],
         ),
         body: GoogleMap(

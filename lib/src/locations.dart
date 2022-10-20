@@ -40,35 +40,34 @@ class Region {
 }
 
 @JsonSerializable()
-class Office {
-  Office({
+class Hotspot {
+  Hotspot({
     required this.address,
     required this.id,
-    required this.image,
     required this.lat,
     required this.lng,
     required this.name,
-    required this.phone,
+    required this.description,
     required this.region,
   });
 
-  factory Office.fromJson(Map<String, dynamic> json) => _$OfficeFromJson(json);
-  Map<String, dynamic> toJson() => _$OfficeToJson(this);
+  factory Hotspot.fromJson(Map<String, dynamic> json) =>
+      _$HotspotFromJson(json);
+  Map<String, dynamic> toJson() => _$HotspotToJson(this);
 
   final String address;
   final String id;
-  final String image;
   final double lat;
   final double lng;
   final String name;
-  final String phone;
+  final String description;
   final String region;
 }
 
 @JsonSerializable()
 class Locations {
   Locations({
-    required this.offices,
+    required this.hotspots,
     required this.regions,
   });
 
@@ -76,12 +75,12 @@ class Locations {
       _$LocationsFromJson(json);
   Map<String, dynamic> toJson() => _$LocationsToJson(this);
 
-  final List<Office> offices;
+  final List<Hotspot> hotspots;
   final List<Region> regions;
 }
 
-Future<Locations> getGoogleOffices() async {
-  const googleLocationsURL = 'https://about.google/static/data/locations.json';
+Future<Locations> getMapData() async {
+  //const googleLocationsURL = 'https://about.google/static/data/locations.json';
 
   // Retrieve the locations of Google offices
   /*try {
