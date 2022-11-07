@@ -12,14 +12,23 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final Map<String, Circle> _circles = {};
-  late final locations.Locations _mapData;
+  Future<locations.Locations>? _mapData;
+
+  initState() {
+    super.initState();
+    _mapData = locations.getMapData();
+  }
+
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    _mapData = await locations.getMapData();
     setState(() {
-      _circles.clear();
-      for (final hotspot in _mapData.hotspots) {
-        final circle = Circle(
+      List<locations.Hotspot> hotspots = [];
+    });
+  }
+
+  Widget _buildMap(locations.Locations mapData) {
+    var regions = mapData.regions;
+
+    var circles = mapData.hotspots.map((hotspot) => Circle(
           circleId: CircleId(hotspot.name),
           radius: 200,
           center: LatLng(hotspot.lat, hotspot.lng),
@@ -27,29 +36,41 @@ class _MyAppState extends State<MyApp> {
           strokeColor: Color.fromARGB(255, 141, 42, 0),
           consumeTapEvents: true,
           onTap: () {},
-        );
-        _circles[hotspot.name] = circle;
-      }
-    });
+        ));
+
+    var startPos = regions.isNotEmpty
+        ? CameraPosition(
+            target: LatLng(regions.first.lat, regions.first.lng),
+            zoom: regions.first.zoom)
+        : const CameraPosition(target: LatLng(0, 0), zoom: 2);
+
+    return GoogleMap(
+      onMapCreated: _onMapCreated,
+      initialCameraPosition: startPos,
+      circles: circles.toSet(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Crime Hotspots'),
-          backgroundColor: Colors.green[700],
-        ),
-        body: GoogleMap(
-          onMapCreated: _onMapCreated,
-          initialCameraPosition: const CameraPosition(
-            target: LatLng(0, 0),
-            zoom: 2,
-          ),
-          circles: _circles.values.toSet(),
-        ),
-      ),
-    );
+        home: FutureBuilder(
+            future: _mapData,
+            builder: (context, AsyncSnapshot<locations.Locations> snapshot) {
+              if (snapshot.hasData) {
+                return Scaffold(
+                    appBar: AppBar(
+                      title: const Text('Crime Hotspots'),
+                      backgroundColor: Colors.green[700],
+                    ),
+                    body: _buildMap(snapshot.requireData));
+              } else {
+                return Scaffold(
+                  appBar: AppBar(
+                    title: Text("Loading"),
+                  ),
+                );
+              }
+            }));
   }
 }
