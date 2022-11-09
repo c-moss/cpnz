@@ -68,20 +68,24 @@ class Locations {
 }
 
 Future<Locations> getMapData() async {
-  //const googleLocationsURL = 'https://about.google/static/data/locations.json';
+  const googleLocationsURL = 'https://about.google/static/data/locations.json';
 
   // Retrieve the locations of Google offices
-  /*try {
+  try {
     final response = await http.get(Uri.parse(googleLocationsURL));
     if (response.statusCode == 200) {
       return Locations.fromJson(
-          json.decode(response.body) as Map<String, dynamic>);
+          //json.decode(response.body) as Map<String, dynamic>);
+          //Return static location data until we have a server...
+          json.decode(
+        await rootBundle.loadString('assets/locations.json'),
+      ) as Map<String, dynamic>);
     }
   } catch (e) {
     if (kDebugMode) {
       print(e);
     }
-  }*/
+  }
 
   // Fallback for when the above HTTP request fails.
   return Locations.fromJson(
