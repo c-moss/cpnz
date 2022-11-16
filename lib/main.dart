@@ -16,6 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Future<locations.Locations>? _mapData;
+  final Map<String, Marker> _markers = {};
 
   initState() {
     super.initState();
@@ -23,9 +24,18 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    setState(() {
-      List<locations.Hotspot> hotspots = [];
-    });
+    _determinePosition().then(
+      (position) {
+        setState(() {
+          _markers.clear();
+          final marker = Marker(
+            markerId: MarkerId("you"),
+            position: LatLng(position.latitude, position.longitude),
+          );
+          _markers["you"] = marker;
+        });
+      },
+    );
   }
 
   Widget _buildMap(locations.Locations mapData) {
@@ -51,6 +61,7 @@ class _MyAppState extends State<MyApp> {
       onMapCreated: _onMapCreated,
       initialCameraPosition: startPos,
       circles: circles.toSet(),
+      markers: _markers.values.toSet(),
     );
   }
 
