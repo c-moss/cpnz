@@ -17,6 +17,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   Future<locations.Locations>? _mapData;
   final Map<String, Marker> _markers = {};
+  final List<LatLng> _pathPoints = [];
 
   initState() {
     super.initState();
@@ -33,6 +34,7 @@ class _MyAppState extends State<MyApp> {
             position: LatLng(position.latitude, position.longitude),
           );
           _markers["you"] = marker;
+          _pathPoints.add(LatLng(position.latitude, position.longitude));
         });
       },
     );
@@ -51,17 +53,28 @@ class _MyAppState extends State<MyApp> {
           onTap: () {},
         ));
 
+    for (var hotspot in mapData.hotspots) {
+      _pathPoints.add(LatLng(hotspot.lat, hotspot.lng));
+    }
+
     var startPos = regions.isNotEmpty
         ? CameraPosition(
             target: LatLng(regions.first.lat, regions.first.lng),
             zoom: regions.first.zoom)
         : const CameraPosition(target: LatLng(0, 0), zoom: 2);
 
+    var polyline = Polyline(
+      polylineId: PolylineId('path'),
+      points: _pathPoints,
+      color: Colors.green,
+    );
+
     return GoogleMap(
       onMapCreated: _onMapCreated,
       initialCameraPosition: startPos,
       circles: circles.toSet(),
       markers: _markers.values.toSet(),
+      polylines: [polyline].toSet(),
     );
   }
 
