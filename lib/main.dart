@@ -19,6 +19,7 @@ class _MyAppState extends State<MyApp> {
   final Map<String, Marker> _markers = {};
   final List<LatLng> _pathPoints = [];
 
+  @override
   initState() {
     super.initState();
     _mapData = locations.getMapData();
@@ -41,8 +42,8 @@ class _MyAppState extends State<MyApp> {
           circleId: CircleId(hotspot.name),
           radius: 200,
           center: LatLng(hotspot.lat, hotspot.lng),
-          fillColor: Color.fromARGB(125, 141, 42, 0),
-          strokeColor: Color.fromARGB(255, 141, 42, 0),
+          fillColor: const Color.fromARGB(125, 141, 42, 0),
+          strokeColor: const Color.fromARGB(255, 141, 42, 0),
           consumeTapEvents: true,
           onTap: () {},
         ));
@@ -54,7 +55,7 @@ class _MyAppState extends State<MyApp> {
         : const CameraPosition(target: LatLng(0, 0), zoom: 2);
 
     var polyline = Polyline(
-      polylineId: PolylineId('path'),
+      polylineId: const PolylineId('path'),
       points: _pathPoints,
       color: Colors.green,
     );
@@ -64,7 +65,7 @@ class _MyAppState extends State<MyApp> {
       initialCameraPosition: startPos,
       circles: circles.toSet(),
       markers: _markers.values.toSet(),
-      polylines: [polyline].toSet(),
+      polylines: {polyline},
     );
   }
 
@@ -84,7 +85,7 @@ class _MyAppState extends State<MyApp> {
               } else {
                 return Scaffold(
                   appBar: AppBar(
-                    title: Text("Loading"),
+                    title: const Text("Loading"),
                   ),
                 );
               }
@@ -127,6 +128,6 @@ class _MyAppState extends State<MyApp> {
           'Location permissions are permanently denied, we cannot request permissions.');
     }
     yield* Geolocator.getPositionStream(
-        locationSettings: LocationSettings(distanceFilter: 5));
+        locationSettings: const LocationSettings(distanceFilter: 5));
   }
 }
