@@ -25,19 +25,13 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    _determinePosition().then(
-      (position) {
-        setState(() {
-          _markers.clear();
-          final marker = Marker(
-            markerId: MarkerId("you"),
-            position: LatLng(position.latitude, position.longitude),
-          );
-          _markers["you"] = marker;
-          _pathPoints.add(LatLng(position.latitude, position.longitude));
-        });
-      },
-    );
+    _trackPosition().listen((pos) {
+      final latLng = LatLng(pos.latitude, pos.longitude);
+      setState(() {
+        _pathPoints.add(latLng);
+      });
+      controller.animateCamera(CameraUpdate.newLatLng(latLng));
+    });
   }
 
   Widget _buildMap(locations.Locations mapData) {
@@ -52,10 +46,6 @@ class _MyAppState extends State<MyApp> {
           consumeTapEvents: true,
           onTap: () {},
         ));
-
-    for (var hotspot in mapData.hotspots) {
-      _pathPoints.add(LatLng(hotspot.lat, hotspot.lng));
-    }
 
     var startPos = regions.isNotEmpty
         ? CameraPosition(
@@ -101,11 +91,11 @@ class _MyAppState extends State<MyApp> {
             }));
   }
 
-  /// Determine the current position of the device.
+  /// Track the position of the device.
   ///
   /// When the location services are not enabled or permissions
-  /// are denied the `Future` will return an error.
-  Future<Position> _determinePosition() async {
+  /// are denied the `Stream` will return an error.
+  Stream<Position> _trackPosition() async* {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -115,7 +105,7 @@ class _MyAppState extends State<MyApp> {
       // Location services are not enabled don't continue
       // accessing the position and request users of the
       // App to enable the location services.
-      return Future.error('Location services are disabled.');
+      throw Exception('Location services are disabled.');
     }
 
     permission = await Geolocator.checkPermission();
@@ -127,18 +117,16 @@ class _MyAppState extends State<MyApp> {
         // Android's shouldShowRequestPermissionRationale
         // returned true. According to Android guidelines
         // your App should show an explanatory UI now.
-        return Future.error('Location permissions are denied');
+        throw Exception('Location permissions are denied');
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
       // Permissions are denied forever, handle appropriately.
-      return Future.error(
+      throw Exception(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-
-    // When we reach here, permissions are granted and we can
-    // continue accessing the position of the device.
-    return await Geolocator.getCurrentPosition();
+    yield* Geolocator.getPositionStream(
+        locationSettings: LocationSettings(distanceFilter: 5));
   }
 }
