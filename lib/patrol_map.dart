@@ -69,25 +69,24 @@ class _PatrolMapState extends State<PatrolMap> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-        home: FutureBuilder(
-            future: _mapData,
-            builder: (context, AsyncSnapshot<locations.Locations> snapshot) {
-              if (snapshot.hasData) {
-                return Scaffold(
-                    appBar: AppBar(
-                      title: const Text('Crime Hotspots'),
-                      backgroundColor: Colors.green[700],
-                    ),
-                    body: _buildMap(snapshot.requireData));
-              } else {
-                return Scaffold(
-                  appBar: AppBar(
-                    title: const Text("Loading"),
-                  ),
-                );
-              }
-            }));
+    return FutureBuilder(
+        future: _mapData,
+        builder: (context, AsyncSnapshot<locations.Locations> snapshot) {
+          if (snapshot.hasData) {
+            return Scaffold(
+                appBar: AppBar(
+                  title: const Text('Crime Hotspots'),
+                  backgroundColor: Colors.green[700],
+                ),
+                body: _buildMap(snapshot.requireData));
+          } else {
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text("Loading"),
+              ),
+            );
+          }
+        });
   }
 
   /// Track the position of the device.

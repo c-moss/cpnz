@@ -1,4 +1,4 @@
-import 'package:cpnz/patrol_map.dart';
+import 'package:cpnz/patrol_app.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(const PatrolMap());
+void main() => runApp(const PatrolApp());
