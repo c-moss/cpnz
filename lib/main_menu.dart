@@ -15,14 +15,20 @@ class _MainMenuState extends State<MainMenu> {
           title: const Text('Main Menu'),
           backgroundColor: Colors.green[700],
         ),
-        body: Expanded(
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 100),
           child: Column(children: [
-            Image.asset('cpnz_logo'),
-            const Card(
-              child: Center(child: Text("Start Patrol")),
+            Image.asset('assets/cpnz_logo.png'),
+            ElevatedButton(
+              onPressed: (() {}),
+              style: ElevatedButton.styleFrom(
+                  minimumSize: const Size.fromHeight(40)),
+              child: const Text("Start Patrol"),
             ),
             OutlinedButton(
                 onPressed: (() {}),
+                style: ElevatedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(40)),
                 child: const Text("View completed patrol logs"))
           ]),
         ));
