@@ -75,14 +75,20 @@ class _PatrolMapState extends State<PatrolMap> {
           if (snapshot.hasData) {
             return Scaffold(
                 appBar: AppBar(
-                  title: const Text('Crime Hotspots'),
-                  backgroundColor: Colors.green[700],
-                ),
+                    title: const Text('Patrol Map'),
+                    backgroundColor: Colors.green[700],
+                    automaticallyImplyLeading: false,
+                    actions: [
+                      CloseButton(
+                        onPressed: () => Navigator.pop(context),
+                      )
+                    ]),
                 body: _buildMap(snapshot.requireData));
           } else {
             return Scaffold(
               appBar: AppBar(
                 title: const Text("Loading"),
+                automaticallyImplyLeading: false,
               ),
             );
           }

@@ -20,7 +20,9 @@ class _MainMenuState extends State<MainMenu> {
           child: Column(children: [
             Image.asset('assets/cpnz_logo.png'),
             ElevatedButton(
-              onPressed: (() {}),
+              onPressed: (() {
+                Navigator.pushNamed(context, "/map");
+              }),
               style: ElevatedButton.styleFrom(
                   minimumSize: const Size.fromHeight(40)),
               child: const Text("Start Patrol"),
