@@ -33,6 +33,39 @@ class _PatrolMapState extends State<PatrolMap> {
     });
   }
 
+  Widget _buildLogIncident(BuildContext context) {
+    return Padding(
+        padding:
+            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            //const Expanded(
+            const TextField(
+              keyboardType: TextInputType.multiline,
+              maxLines: 10,
+            ),
+            Row(
+              children: [
+                Expanded(
+                    child: TextButton(
+                        style: const ButtonStyle(
+                            foregroundColor:
+                                MaterialStatePropertyAll(Colors.white),
+                            backgroundColor:
+                                MaterialStatePropertyAll(Colors.lightBlue)),
+                        onPressed: (() {}),
+                        child: const Text("Record"))),
+                Expanded(
+                    child: TextButton(
+                        onPressed: (() => Navigator.pop(context)),
+                        child: const Text("Cancel")))
+              ],
+            )
+          ],
+        ));
+  }
+
   Widget _buildMap(locations.Locations mapData) {
     var regions = mapData.regions;
 
@@ -83,7 +116,22 @@ class _PatrolMapState extends State<PatrolMap> {
                         onPressed: () => Navigator.pop(context),
                       )
                     ]),
-                body: _buildMap(snapshot.requireData));
+                body: _buildMap(snapshot.requireData),
+                floatingActionButtonLocation:
+                    FloatingActionButtonLocation.centerFloat,
+                floatingActionButton: FloatingActionButton.extended(
+                  backgroundColor: Colors.orange,
+                  icon: const Icon(Icons.report_problem),
+                  label: const Text('Log incident'),
+                  onPressed: () {
+                    showModalBottomSheet(
+                        isScrollControlled: true,
+                        context: context,
+                        builder: (context) {
+                          return _buildLogIncident(context);
+                        });
+                  },
+                ));
           } else {
             return Scaffold(
               appBar: AppBar(
