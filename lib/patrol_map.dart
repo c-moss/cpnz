@@ -40,7 +40,6 @@ class _PatrolMapState extends State<PatrolMap> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            //const Expanded(
             const TextField(
               keyboardType: TextInputType.multiline,
               maxLines: 10,
@@ -49,19 +48,26 @@ class _PatrolMapState extends State<PatrolMap> {
               children: [
                 Expanded(
                     child: TextButton(
-                        style: const ButtonStyle(
-                            foregroundColor:
-                                MaterialStatePropertyAll(Colors.white),
-                            backgroundColor:
-                                MaterialStatePropertyAll(Colors.lightBlue)),
+                        style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(),
+                            minimumSize: Size.fromHeight(48),
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.lightBlue),
                         onPressed: (() {}),
                         child: const Text("Record"))),
                 Expanded(
                     child: TextButton(
+                        style: TextButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            shape: RoundedRectangleBorder(),
+                            minimumSize: Size.fromHeight(48),
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.deepOrange),
                         onPressed: (() => Navigator.pop(context)),
                         child: const Text("Cancel")))
               ],
-            )
+            ),
           ],
         ));
   }
