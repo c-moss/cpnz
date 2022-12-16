@@ -79,8 +79,9 @@ class _PatrolMapState extends State<PatrolMap> {
           circleId: CircleId(hotspot.name),
           radius: hotspot.radius,
           center: LatLng(hotspot.lat, hotspot.lng),
-          fillColor: const Color.fromARGB(125, 141, 42, 0),
-          strokeColor: const Color.fromARGB(255, 141, 42, 0),
+          fillColor: const Color.fromARGB(125, 235, 83, 33),
+          strokeColor: const Color.fromARGB(75, 235, 83, 33),
+          strokeWidth: 20,
           consumeTapEvents: true,
           onTap: () {},
         ));
