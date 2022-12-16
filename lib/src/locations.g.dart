@@ -23,10 +23,11 @@ Map<String, dynamic> _$RegionToJson(Region instance) => <String, dynamic>{
     };
 
 Hotspot _$HotspotFromJson(Map<String, dynamic> json) => Hotspot(
-      address: json['address'] as String,
+      address: json['address'] as String?,
       id: json['id'] as String,
       lat: (json['lat'] as num).toDouble(),
       lng: (json['lng'] as num).toDouble(),
+      radius: (json['radius'] as num).toDouble(),
       name: json['name'] as String,
       description: json['description'] as String,
       region: json['region'] as String,
@@ -37,6 +38,7 @@ Map<String, dynamic> _$HotspotToJson(Hotspot instance) => <String, dynamic>{
       'id': instance.id,
       'lat': instance.lat,
       'lng': instance.lng,
+      'radius': instance.radius,
       'name': instance.name,
       'description': instance.description,
       'region': instance.region,

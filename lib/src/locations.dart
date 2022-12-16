@@ -30,10 +30,11 @@ class Region {
 @JsonSerializable()
 class Hotspot {
   Hotspot({
-    required this.address,
+    this.address,
     required this.id,
     required this.lat,
     required this.lng,
+    required this.radius,
     required this.name,
     required this.description,
     required this.region,
@@ -43,10 +44,11 @@ class Hotspot {
       _$HotspotFromJson(json);
   Map<String, dynamic> toJson() => _$HotspotToJson(this);
 
-  final String address;
+  final String? address;
   final String id;
   final double lat;
   final double lng;
+  final double radius;
   final String name;
   final String description;
   final String region;

@@ -77,7 +77,7 @@ class _PatrolMapState extends State<PatrolMap> {
 
     var circles = mapData.hotspots.map((hotspot) => Circle(
           circleId: CircleId(hotspot.name),
-          radius: 200,
+          radius: hotspot.radius,
           center: LatLng(hotspot.lat, hotspot.lng),
           fillColor: const Color.fromARGB(125, 141, 42, 0),
           strokeColor: const Color.fromARGB(255, 141, 42, 0),

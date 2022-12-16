@@ -5,8 +5,9 @@
             "id": "war-memorial-park",
             "lat": -36.904089921474586,
             "lng": 174.7352609811198,
+            "radius": 200,
             "name": "War Memorial Park",
-            "description": "Lotsa crimez",
+            "description": "Dirt bikes, public drinking",
             "region": "mt-roskill"
         },
         {
@@ -14,8 +15,63 @@
             "id": "22-stoddard-rd",
             "lat": -36.90724419012617,
             "lng": 174.7336450465943,
-            "name": "22 Stoddard Rd",
-            "description": "Lotsa crimez",
+            "radius": 200,
+            "name": "New World Stoddard Rd",
+            "description": "Public drinking, car theft",
+            "region": "mt-roskill"
+        },
+        {
+            "id": "richmond-rd",
+            "lat": -36.86199281003291,
+            "lng": 174.73305338244634,
+            "radius": 300,
+            "name": "Grey Lynn - Richmond Rd",
+            "description": "Car theft and break-ins",
+            "region": "mt-roskill"
+        },
+        {
+            "id": "grey-lynn",
+            "lat": -36.86142669260141,
+            "lng": 174.74657965842346,
+            "radius": 600,
+            "name": "Grey Lynn",
+            "description": "Car theft and break-ins",
+            "region": "mt-roskill"
+        },
+        {
+            "id": "countdown-mt-eden",
+            "lat": -36.87678578411944,
+            "lng": 174.7518465339982,
+            "radius": 400,
+            "name": "Countdown Mt Eden",
+            "description": "Public drinking, disorder",
+            "region": "mt-roskill"
+        },
+        {
+            "id": "balmoral-backstreets",
+            "lat": -36.88906378015715,
+            "lng": 174.74835056578698,
+            "radius": 300,
+            "name": "Backstreets around Balmoral",
+            "description": "Car theft and break-ins",
+            "region": "mt-roskill"
+        },
+        {
+            "id": "ash-st",
+            "lat": -36.892077701880076,
+            "lng": 174.69576376109097,
+            "radius": 250,
+            "name": "New Lynn - Ash St",
+            "description": "Car theft and break-ins",
+            "region": "mt-roskill"
+        },
+        {
+            "id": "hayr-rd",
+            "lat": -36.91214383668292,
+            "lng": 174.7560202502443,
+            "radius": 150,
+            "name": "Mt Roskill - Hayr Rd",
+            "description": "Car theft and break-ins",
             "region": "mt-roskill"
         }
     ],
