@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cpnz/src/route_point.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'src/locations.dart' as locations;
@@ -15,11 +16,19 @@ class PatrolMap extends StatefulWidget {
 class _PatrolMapState extends State<PatrolMap> {
   Future<locations.Locations>? _mapData;
   final Map<String, Marker> _markers = {};
-  final List<LatLng> _pathPoints = [];
+  final List<RoutePoint> _route = [];
+  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+
+  static const String MARKER_ID_PATROL_CAR = "patrolCar";
 
   @override
   initState() {
     super.initState();
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration(size: Size(16, 48)), 'assets/cpnz_marker.png')
+        .then((onValue) {
+      markerIcon = onValue;
+    });
     _mapData = locations.getMapData();
   }
 
@@ -27,7 +36,12 @@ class _PatrolMapState extends State<PatrolMap> {
     _trackPosition().listen((pos) {
       final latLng = LatLng(pos.latitude, pos.longitude);
       setState(() {
-        _pathPoints.add(latLng);
+        _route
+            .add(RoutePoint(latLng.latitude, latLng.longitude, DateTime.now()));
+        _markers["patrolCar"] = Marker(
+            markerId: MarkerId(MARKER_ID_PATROL_CAR),
+            position: latLng,
+            icon: markerIcon);
       });
       controller.animateCamera(CameraUpdate.newLatLng(latLng));
     });
@@ -50,8 +64,8 @@ class _PatrolMapState extends State<PatrolMap> {
                     child: TextButton(
                         style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(),
-                            minimumSize: Size.fromHeight(48),
+                            shape: const RoundedRectangleBorder(),
+                            minimumSize: const Size.fromHeight(48),
                             foregroundColor: Colors.white,
                             backgroundColor: Colors.lightBlue),
                         onPressed: (() {}),
@@ -60,8 +74,8 @@ class _PatrolMapState extends State<PatrolMap> {
                     child: TextButton(
                         style: TextButton.styleFrom(
                             padding: EdgeInsets.zero,
-                            shape: RoundedRectangleBorder(),
-                            minimumSize: Size.fromHeight(48),
+                            shape: const RoundedRectangleBorder(),
+                            minimumSize: const Size.fromHeight(48),
                             foregroundColor: Colors.white,
                             backgroundColor: Colors.deepOrange),
                         onPressed: (() => Navigator.pop(context)),
@@ -94,7 +108,7 @@ class _PatrolMapState extends State<PatrolMap> {
 
     var polyline = Polyline(
       polylineId: const PolylineId('path'),
-      points: _pathPoints,
+      points: _route.map((e) => LatLng(e.lat, e.lng)).toList(),
       color: Colors.green,
     );
 
