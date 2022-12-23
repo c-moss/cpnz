@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import 'package:cpnz/src/route_point.dart';
+import 'package:cpnz/src/models/patrol_log.dart';
+import 'package:cpnz/src/models/route_point.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'src/locations.dart' as locations;
@@ -16,8 +17,10 @@ class PatrolMap extends StatefulWidget {
 class _PatrolMapState extends State<PatrolMap> {
   Future<locations.Locations>? _mapData;
   final Map<String, Marker> _markers = {};
-  final List<RoutePoint> _route = [];
-  BitmapDescriptor markerIcon = BitmapDescriptor.defaultMarker;
+  final PatrolLog _log = PatrolLog();
+  bool hasGPS = false;
+
+  BitmapDescriptor patrolMarkerIcon = BitmapDescriptor.defaultMarker;
 
   static const String MARKER_ID_PATROL_CAR = "patrolCar";
 
@@ -25,9 +28,10 @@ class _PatrolMapState extends State<PatrolMap> {
   initState() {
     super.initState();
     BitmapDescriptor.fromAssetImage(
-            ImageConfiguration(size: Size(16, 48)), 'assets/cpnz_marker.png')
+            const ImageConfiguration(size: Size(16, 48)),
+            'assets/cpnz_marker.png')
         .then((onValue) {
-      markerIcon = onValue;
+      patrolMarkerIcon = onValue;
     });
     _mapData = locations.getMapData();
   }
@@ -36,12 +40,12 @@ class _PatrolMapState extends State<PatrolMap> {
     _trackPosition().listen((pos) {
       final latLng = LatLng(pos.latitude, pos.longitude);
       setState(() {
-        _route
+        _log.route
             .add(RoutePoint(latLng.latitude, latLng.longitude, DateTime.now()));
         _markers["patrolCar"] = Marker(
-            markerId: MarkerId(MARKER_ID_PATROL_CAR),
+            markerId: const MarkerId(MARKER_ID_PATROL_CAR),
             position: latLng,
-            icon: markerIcon);
+            icon: patrolMarkerIcon);
       });
       controller.animateCamera(CameraUpdate.newLatLng(latLng));
     });
@@ -108,7 +112,7 @@ class _PatrolMapState extends State<PatrolMap> {
 
     var polyline = Polyline(
       polylineId: const PolylineId('path'),
-      points: _route.map((e) => LatLng(e.lat, e.lng)).toList(),
+      points: _log.route.map((e) => LatLng(e.lat, e.lng)).toList(),
       color: Colors.green,
     );
 
