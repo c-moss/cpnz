@@ -5,6 +5,11 @@ class PatrolLog {
   final List<RoutePoint> route = [];
   final List<PatrolIncident> incidents = [];
   PatrolStatus status = PatrolStatus.notStarted;
+
+  RoutePoint? getLatestPosition() {
+    route.sort(((a, b) => a.timestamp.compareTo(b.timestamp)));
+    return route.isNotEmpty ? route.last : null;
+  }
 }
 
 enum PatrolStatus { notStarted, inProgress, completed }

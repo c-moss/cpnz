@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cpnz/src/models/patrol_incident.dart';
 import 'package:cpnz/src/models/patrol_log.dart';
 import 'package:cpnz/src/models/route_point.dart';
 import 'package:flutter/material.dart';
@@ -65,28 +66,53 @@ class _PatrolMapState extends State<PatrolMap> {
   }
 
   Widget _buildLogIncident(BuildContext context) {
+    TextEditingController controller = TextEditingController();
+
     return Padding(
         padding:
             EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const TextField(
-              keyboardType: TextInputType.multiline,
-              maxLines: 10,
-            ),
+            Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: TextField(
+                    controller: controller,
+                    keyboardType: TextInputType.multiline,
+                    autofocus: true,
+                    maxLines: 10)),
             Row(
               children: [
                 Expanded(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            shape: const RoundedRectangleBorder(),
-                            minimumSize: const Size.fromHeight(48),
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.lightBlue),
-                        onPressed: (() {}),
-                        child: const Text("Record"))),
+                    child: ValueListenableBuilder(
+                        valueListenable: controller,
+                        builder: (context, value, child) {
+                          return TextButton(
+                              style: TextButton.styleFrom(
+                                  padding: EdgeInsets.zero,
+                                  shape: const RoundedRectangleBorder(),
+                                  minimumSize: const Size.fromHeight(48),
+                                  foregroundColor: Colors.white,
+                                  backgroundColor: Colors.lightBlue),
+                              onPressed: (value.text.isEmpty
+                                  ? null
+                                  : () {
+                                      var currentPosition =
+                                          _log.getLatestPosition();
+                                      if (currentPosition != null) {
+                                        var newIncident =
+                                            PatrolIncident.fromRoutePoint(
+                                                currentPosition);
+                                        newIncident.description =
+                                            controller.text;
+                                        setState(() {
+                                          _log.incidents.add(newIncident);
+                                        });
+                                      }
+                                      Navigator.pop(context);
+                                    }),
+                              child: const Text("Save"));
+                        })),
                 Expanded(
                     child: TextButton(
                         style: TextButton.styleFrom(
@@ -134,7 +160,13 @@ class _PatrolMapState extends State<PatrolMap> {
       mapType: MapType.normal,
       initialCameraPosition: startPos,
       circles: circles.toSet(),
-      markers: _markers.values.toSet(),
+      // ignore: prefer_collection_literals
+      markers: [
+        ..._markers.values,
+        ..._log.incidents.map((incident) => Marker(
+            markerId: MarkerId(incident.timestamp.toString()),
+            position: LatLng(incident.lat, incident.lng)))
+      ].toSet(),
       polylines: {polyline},
     );
   }
