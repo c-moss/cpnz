@@ -39,6 +39,7 @@ dependencies:
     http: ^0.13.5
     json_serializable: ^6.5.2
     geolocator: ^9.0.2
+    logger: ^1.1.0
 
 dev_dependencies:
     flutter_test:
@@ -65,6 +66,9 @@ flutter:
         - assets/locations.json
         - assets/cpnz_logo.png
         - assets/cpnz_marker.png
+        - assets/loading_spinner.gif
+        - assets/loading-36.webp
+
     # To add assets to your application, add an assets section, like this:
     # assets:
     #   - images/a_dot_burr.jpeg

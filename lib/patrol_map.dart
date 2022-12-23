@@ -4,6 +4,7 @@ import 'package:cpnz/src/models/patrol_log.dart';
 import 'package:cpnz/src/models/route_point.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:logger/logger.dart';
 import 'src/locations.dart' as locations;
 import 'package:geolocator/geolocator.dart';
 
@@ -18,7 +19,9 @@ class _PatrolMapState extends State<PatrolMap> {
   Future<locations.Locations>? _mapData;
   final Map<String, Marker> _markers = {};
   final PatrolLog _log = PatrolLog();
-  bool hasGPS = false;
+  bool _hasGPSFix = false;
+  final _logger = Logger();
+  StreamSubscription<Position>? _gpsLocationSubscription;
 
   BitmapDescriptor patrolMarkerIcon = BitmapDescriptor.defaultMarker;
 
@@ -27,6 +30,7 @@ class _PatrolMapState extends State<PatrolMap> {
   @override
   initState() {
     super.initState();
+    _logger.i("CMTEST initState");
     BitmapDescriptor.fromAssetImage(
             const ImageConfiguration(size: Size(16, 48)),
             'assets/cpnz_marker.png')
@@ -36,10 +40,19 @@ class _PatrolMapState extends State<PatrolMap> {
     _mapData = locations.getMapData();
   }
 
+  @override
+  dispose() {
+    super.dispose();
+    _logger.i("CMTEST dispose");
+    _gpsLocationSubscription?.cancel();
+  }
+
   Future<void> _onMapCreated(GoogleMapController controller) async {
-    _trackPosition().listen((pos) {
+    _logger.i("CMTEST onMapCreated");
+    _gpsLocationSubscription = _trackPosition().listen((pos) {
       final latLng = LatLng(pos.latitude, pos.longitude);
       setState(() {
+        _hasGPSFix = true;
         _log.route
             .add(RoutePoint(latLng.latitude, latLng.longitude, DateTime.now()));
         _markers["patrolCar"] = Marker(
@@ -118,6 +131,7 @@ class _PatrolMapState extends State<PatrolMap> {
 
     return GoogleMap(
       onMapCreated: _onMapCreated,
+      mapType: MapType.normal,
       initialCameraPosition: startPos,
       circles: circles.toSet(),
       markers: _markers.values.toSet(),
@@ -127,6 +141,7 @@ class _PatrolMapState extends State<PatrolMap> {
 
   @override
   Widget build(BuildContext context) {
+    _logger.i("CMTEST build");
     return FutureBuilder(
         future: _mapData,
         builder: (context, AsyncSnapshot<locations.Locations> snapshot) {
@@ -141,22 +156,46 @@ class _PatrolMapState extends State<PatrolMap> {
                         onPressed: () => Navigator.pop(context),
                       )
                     ]),
-                body: _buildMap(snapshot.requireData),
+                body: Stack(children: [
+                  _buildMap(snapshot.requireData),
+                  if (!_hasGPSFix)
+                    Container(
+                        alignment: Alignment.center,
+                        color: const Color.fromARGB(160, 0, 0, 0),
+                        // width: double.infinity,
+                        // height: double.infinity,
+                        constraints: const BoxConstraints.expand(),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/loading_spinner.gif',
+                                width: 70,
+                                height: 70,
+                              ),
+                              const SizedBox(height: 20),
+                              const Text("Detecting location..",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 20))
+                            ]))
+                ]),
                 floatingActionButtonLocation:
                     FloatingActionButtonLocation.centerFloat,
-                floatingActionButton: FloatingActionButton.extended(
-                  backgroundColor: Colors.orange,
-                  icon: const Icon(Icons.report_problem),
-                  label: const Text('Log incident'),
-                  onPressed: () {
-                    showModalBottomSheet(
-                        isScrollControlled: true,
-                        context: context,
-                        builder: (context) {
-                          return _buildLogIncident(context);
-                        });
-                  },
-                ));
+                floatingActionButton: _hasGPSFix
+                    ? FloatingActionButton.extended(
+                        backgroundColor: Colors.orange,
+                        icon: const Icon(Icons.report_problem),
+                        label: const Text('Log incident'),
+                        onPressed: () {
+                          showModalBottomSheet(
+                              isScrollControlled: true,
+                              context: context,
+                              builder: (context) {
+                                return _buildLogIncident(context);
+                              });
+                        },
+                      )
+                    : null);
           } else {
             return Scaffold(
               appBar: AppBar(
