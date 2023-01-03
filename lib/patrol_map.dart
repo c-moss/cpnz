@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cpnz/views/log_incident.dart';
 import 'package:cpnz/src/models/patrol_incident.dart';
 import 'package:cpnz/src/models/patrol_log.dart';
 import 'package:cpnz/src/models/route_point.dart';
@@ -63,70 +64,6 @@ class _PatrolMapState extends State<PatrolMap> {
       });
       controller.animateCamera(CameraUpdate.newLatLng(latLng));
     });
-  }
-
-  Widget _buildLogIncident(BuildContext context) {
-    TextEditingController controller = TextEditingController();
-
-    return Padding(
-        padding:
-            EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: TextField(
-                    controller: controller,
-                    keyboardType: TextInputType.multiline,
-                    autofocus: true,
-                    maxLines: 10)),
-            Row(
-              children: [
-                Expanded(
-                    child: ValueListenableBuilder(
-                        valueListenable: controller,
-                        builder: (context, value, child) {
-                          return TextButton(
-                              style: TextButton.styleFrom(
-                                  padding: EdgeInsets.zero,
-                                  shape: const RoundedRectangleBorder(),
-                                  minimumSize: const Size.fromHeight(48),
-                                  foregroundColor: Colors.white,
-                                  backgroundColor: Colors.lightBlue),
-                              onPressed: (value.text.isEmpty
-                                  ? null
-                                  : () {
-                                      var currentPosition =
-                                          _log.getLatestPosition();
-                                      if (currentPosition != null) {
-                                        var newIncident =
-                                            PatrolIncident.fromRoutePoint(
-                                                currentPosition);
-                                        newIncident.description =
-                                            controller.text;
-                                        setState(() {
-                                          _log.incidents.add(newIncident);
-                                        });
-                                      }
-                                      Navigator.pop(context);
-                                    }),
-                              child: const Text("Save"));
-                        })),
-                Expanded(
-                    child: TextButton(
-                        style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            shape: const RoundedRectangleBorder(),
-                            minimumSize: const Size.fromHeight(48),
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.deepOrange),
-                        onPressed: (() => Navigator.pop(context)),
-                        child: const Text("Cancel")))
-              ],
-            ),
-          ],
-        ));
   }
 
   Widget _buildMap(locations.Locations mapData) {
@@ -223,7 +160,24 @@ class _PatrolMapState extends State<PatrolMap> {
                               isScrollControlled: true,
                               context: context,
                               builder: (context) {
-                                return _buildLogIncident(context);
+                                return LogIncident(
+                                    onSubmit: (String? incidentDescription) {
+                                  if (incidentDescription != null) {
+                                    var currentPosition =
+                                        _log.getLatestPosition();
+                                    if (currentPosition != null) {
+                                      var newIncident =
+                                          PatrolIncident.fromRoutePoint(
+                                              currentPosition);
+                                      newIncident.description =
+                                          incidentDescription;
+                                      setState(() {
+                                        _log.incidents.add(newIncident);
+                                      });
+                                    }
+                                  }
+                                  Navigator.pop(context);
+                                });
                               });
                         },
                       )
