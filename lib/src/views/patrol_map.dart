@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:cpnz/views/log_incident.dart';
+import 'package:cpnz/src/views/log_incident.dart';
 import 'package:cpnz/src/models/patrol_incident.dart';
 import 'package:cpnz/src/models/patrol_log.dart';
 import 'package:cpnz/src/models/route_point.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:logger/logger.dart';
-import 'src/locations.dart' as locations;
+import 'package:cpnz/src/locations.dart' as locations;
 import 'package:geolocator/geolocator.dart';
 
 class PatrolMap extends StatefulWidget {

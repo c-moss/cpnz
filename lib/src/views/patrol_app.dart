@@ -1,5 +1,5 @@
-import 'package:cpnz/main_menu.dart';
-import 'package:cpnz/patrol_map.dart';
+import 'package:cpnz/src/views/main_menu.dart';
+import 'package:cpnz/src/views/patrol_map.dart';
 import 'package:flutter/material.dart';
 
 class PatrolApp extends StatefulWidget {
