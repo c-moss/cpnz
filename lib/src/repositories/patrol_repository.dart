@@ -21,7 +21,7 @@ class PatrolRepository {
     var logFile = File(
         '$path/$LOG_DIR/log_${log.startTime}.txt'); //TODO: name files properly
     _logger.i("CMTEST patrolLogJson: ${json.encode(log.toJson())}");
-    logFile.writeAsString(json.encode(log.toJson()));
+    //logFile.writeAsString(json.encode(log.toJson()));
     return Future.value();
   }
 

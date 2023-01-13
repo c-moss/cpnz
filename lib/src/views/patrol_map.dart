@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:cpnz/src/repositories/patrol_repository.dart';
+import 'package:cpnz/src/util/service_locator.dart';
 import 'package:cpnz/src/views/log_incident.dart';
 import 'package:cpnz/src/models/patrol_incident.dart';
 import 'package:cpnz/src/models/patrol_log.dart';
@@ -39,6 +41,7 @@ class _PatrolMapState extends State<PatrolMap> {
         .then((onValue) {
       patrolMarkerIcon = onValue;
     });
+    _log.startPatrol();
     _mapData = locations.getMapData();
   }
 
@@ -122,7 +125,11 @@ class _PatrolMapState extends State<PatrolMap> {
                     automaticallyImplyLeading: false,
                     actions: [
                       CloseButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          _log.endPatrol();
+                          sl<PatrolRepository>().storePatrolLog(_log);
+                          Navigator.pop(context);
+                        },
                       )
                     ]),
                 body: Stack(children: [

@@ -6,8 +6,8 @@ part 'patrol_log.g.dart';
 
 @JsonSerializable()
 class PatrolLog {
-  final List<RoutePoint> route = [];
-  final List<PatrolIncident> incidents = [];
+  List<RoutePoint> route = [];
+  List<PatrolIncident> incidents = [];
   PatrolStatus status = PatrolStatus.notStarted;
   DateTime? startTime;
   DateTime? endTime;
@@ -21,6 +21,16 @@ class PatrolLog {
   RoutePoint? getLatestPosition() {
     route.sort(((a, b) => a.timestamp.compareTo(b.timestamp)));
     return route.isNotEmpty ? route.last : null;
+  }
+
+  void startPatrol() {
+    status = PatrolStatus.inProgress;
+    startTime = DateTime.now();
+  }
+
+  void endPatrol() {
+    status = PatrolStatus.completed;
+    endTime = DateTime.now();
   }
 }
 
