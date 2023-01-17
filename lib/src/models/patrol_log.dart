@@ -32,6 +32,10 @@ class PatrolLog {
     status = PatrolStatus.completed;
     endTime = DateTime.now();
   }
+
+  String getStatusString() {
+    return status.toString().split(".").last;
+  }
 }
 
 enum PatrolStatus { notStarted, inProgress, completed }
