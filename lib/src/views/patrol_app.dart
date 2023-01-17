@@ -1,4 +1,5 @@
 import 'package:cpnz/src/views/main_menu.dart';
+import 'package:cpnz/src/views/patrol_logs.dart';
 import 'package:cpnz/src/views/patrol_map.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class _PatrolAppState extends State<PatrolApp> {
     return MaterialApp(title: 'PatrolApp', initialRoute: '/', routes: {
       '/': (context) => const MainMenu(),
       '/map': (context) => const PatrolMap(),
+      '/logs': (context) => const PatrolLogs(),
     });
   }
 }
