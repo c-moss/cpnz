@@ -1,6 +1,7 @@
 import 'package:cpnz/src/views/main_menu.dart';
 import 'package:cpnz/src/views/patrol_logs.dart';
 import 'package:cpnz/src/views/patrol_map.dart';
+import 'package:cpnz/src/views/view_log.dart';
 import 'package:flutter/material.dart';
 
 class PatrolApp extends StatefulWidget {
@@ -17,6 +18,7 @@ class _PatrolAppState extends State<PatrolApp> {
       '/': (context) => const MainMenu(),
       '/map': (context) => const PatrolMap(),
       '/logs': (context) => const PatrolLogs(),
+      '/view_log': (context) => const ViewLog(),
     });
   }
 }

@@ -22,7 +22,7 @@ class _PatrolLogsState extends State<PatrolLogs> {
   }
 
   ListTile _getListTile(PatrolLog log) {
-    DateFormat dateFormatter = DateFormat("EEE M/dd/y");
+    DateFormat dateFormatter = DateFormat("EEE dd MMM y");
     DateFormat timeFormatter = DateFormat("HHm");
     final start = log.startTime;
     final end = log.endTime;
@@ -48,7 +48,14 @@ class _PatrolLogsState extends State<PatrolLogs> {
       icon = const Icon(Icons.question_mark, color: Colors.redAccent);
     }
 
-    return ListTile(leading: icon, title: title, subtitle: subtitle);
+    return ListTile(
+      leading: icon,
+      title: title,
+      subtitle: subtitle,
+      onTap: () {
+        Navigator.pushNamed(context, "/view_log", arguments: log);
+      },
+    );
   }
 
   @override
