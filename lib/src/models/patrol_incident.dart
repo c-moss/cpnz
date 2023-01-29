@@ -18,5 +18,19 @@ class PatrolIncident {
   final double lng;
   final DateTime timestamp;
   String? description;
+  String? location;
   Hotspot? hotspot;
+  bool? policeAttended;
+
+  String getIncidentLocationName() {
+    final hotspot = this.hotspot;
+    final location = this.location;
+    if (hotspot != null) {
+      return hotspot.name;
+    } else if (location != null) {
+      return location;
+    } else {
+      return "$lat, $lng";
+    }
+  }
 }

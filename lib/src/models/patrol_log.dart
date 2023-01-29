@@ -36,6 +36,10 @@ class PatrolLog {
   String getStatusString() {
     return status.toString().split(".").last;
   }
+
+  int getRouteDistanceTravelled() {
+    return 0;
+  }
 }
 
 enum PatrolStatus { notStarted, inProgress, completed }
