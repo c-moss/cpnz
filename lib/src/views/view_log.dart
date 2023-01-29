@@ -102,8 +102,7 @@ class ViewLog extends StatelessWidget {
           _detailRow(children: [
             _item("TOTAL HOURS", _getPatrolDuration(log)),
             _horizontalSpacer,
-            _item(
-                "TOTAL KMs", "${log.getRouteDistanceTravelled()}") //TODO: value
+            _item("TOTAL KMs", "${log.getRouteDistanceTravelled().round()}")
           ]),
         ]));
   }
