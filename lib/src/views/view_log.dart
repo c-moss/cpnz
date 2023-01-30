@@ -144,7 +144,7 @@ class ViewLog extends StatelessWidget {
           Expanded(
               flex: _incidentOutcomeColumnWidth,
               child: Text(
-                'OUTCOME',
+                'POLICE (Y/N)',
                 style: _textStyleLabel,
               )),
         ]));
@@ -184,7 +184,7 @@ class ViewLog extends StatelessWidget {
   }
 
   Widget _logIncidentsList(PatrolLog log) {
-    List<PatrolIncident> incidents = _getFakeIncidents(log);
+    final List<PatrolIncident> incidents = log.incidents;
     return ListView.separated(
       itemCount: incidents.length,
       itemBuilder: ((context, index) => _logIncidentRow(incidents[index])),
