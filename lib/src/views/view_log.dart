@@ -65,15 +65,15 @@ class ViewLog extends StatelessWidget {
           ]),
           _verticalSpacer,
           _detailRow(children: [
-            _item("RECORDER", "Campbell Moss"), //TODO: value
+            _item("RECORDER", "Jane Doe"), //TODO: value
             _horizontalSpacer,
             _item("CELL", "021 1234567") //TODO: value
           ]),
           _verticalSpacer,
           _detailRow(children: [
-            _item("OBSERVER (A)", "Campbell Moss"), //TODO: value
+            _item("OBSERVER (A)", ""), //TODO: value
             _horizontalSpacer,
-            _item("OBSERVER (B)", "Campbell Moss") //TODO: value
+            _item("OBSERVER (B)", "") //TODO: value
           ]),
         ]));
   }
@@ -109,7 +109,7 @@ class ViewLog extends StatelessWidget {
 
   Widget _logIncidents(PatrolLog log) {
     return Padding(
-        padding: EdgeInsets.symmetric(horizontal: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 8),
         child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -120,7 +120,7 @@ class ViewLog extends StatelessWidget {
 
   Widget _logIncidentsHeader(PatrolLog log) {
     return Padding(
-        padding: EdgeInsets.symmetric(vertical: 4),
+        padding: const EdgeInsets.symmetric(vertical: 4),
         child: Row(children: const [
           Expanded(
               flex: _incidentLocationColumnWidth,
@@ -183,7 +183,7 @@ class ViewLog extends StatelessWidget {
   }
 
   Widget _logIncidentsList(PatrolLog log) {
-    List<PatrolIncident> incidents = _getFakeIncidents();
+    List<PatrolIncident> incidents = _getFakeIncidents(log);
     return ListView.separated(
       itemCount: incidents.length,
       itemBuilder: ((context, index) => _logIncidentRow(incidents[index])),
@@ -194,15 +194,91 @@ class ViewLog extends StatelessWidget {
     // _logIncidentRow(log.incidents[index])));
   }
 
-  List<PatrolIncident> _getFakeIncidents() {
+  PatrolIncident _getFakeIncident(double lat, double lng, DateTime timestamp,
+      String location, String description) {
+    PatrolIncident i = PatrolIncident(lat, lng, timestamp);
+    i.location = location;
+    i.description = description;
+    return i;
+  }
+
+  List<PatrolIncident> _getFakeIncidents(PatrolLog log) {
+    DateTime rTime = log.startTime!;
     List<PatrolIncident> rows = [];
-    for (var i = 0; i < 60; i++) {
-      PatrolIncident i = PatrolIncident(-38.4532, 176.8372, DateTime.now());
-      i.location = "Roma Rd";
-      i.description =
-          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. ";
-      rows.add(i);
-    }
+
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Roma Rd",
+        "All clear"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Countdown - Lynfield",
+        "Black sedan around back - IGH123"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Dominion Rd - back streets",
+        "All clear"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Wiremu St",
+        "Blue Nissan Patrol NYL123"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Countdown - Mt Eden",
+        "All clear"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Carr Rd",
+        "Alarm going off at 165 Carr rd - no sign of burglary, notified security by phone"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Tony Martin's Gym",
+        "Car under overpass - Silver Toyota Aqua RTY123"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Williamson Ave",
+        "All clear"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "War Memorial Park",
+        "All clear"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Countdown - Stoddard Rd",
+        "All clear"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Wesley Community Centre",
+        "All clear"));
+    rows.add(_getFakeIncident(
+        -38.4532,
+        176.8372,
+        rTime = rTime.add(const Duration(minutes: 11)),
+        "Gifford Ave Car Park",
+        "All clear"));
+
     return rows;
   }
 
@@ -220,8 +296,8 @@ class ViewLog extends StatelessWidget {
               )
             ]),
         body: Column(children: [
-          Card(child: _patrolDetails(log)),
-          Card(child: _routeDetails(log)),
+          Card(elevation: 5, child: _patrolDetails(log)),
+          Card(elevation: 5, child: _routeDetails(log)),
           //SingleChildScrollView(child: _logIncidents(log))
           Expanded(child: _logIncidents(log))
         ]));
