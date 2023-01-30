@@ -11,7 +11,7 @@ class ViewLog extends StatelessWidget {
   static const _incidentTimeColumnWidth = 1;
   static const _incidentCommentsColumnWidth = 6;
   static const _incidentOutcomeColumnWidth = 1;
-  static const _horizontalSpacer = SizedBox(width: 30);
+  static const _horizontalSpacer = SizedBox(width: 32);
   static const _verticalSpacer = SizedBox(height: 4);
 
   static const _textStyleLabel = TextStyle(

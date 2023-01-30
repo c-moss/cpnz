@@ -22,7 +22,7 @@ class _PatrolLogsState extends State<PatrolLogs> {
   }
 
   ListTile _getListTile(PatrolLog log) {
-    DateFormat dateFormatter = DateFormat("EEE dd MMM y");
+    DateFormat dateFormatter = DateFormat("EEE dd MMM, y");
     DateFormat timeFormatter = DateFormat("HHm");
     final start = log.startTime;
     final end = log.endTime;
@@ -49,9 +49,12 @@ class _PatrolLogsState extends State<PatrolLogs> {
     }
 
     return ListTile(
-      leading: icon,
+      leading: SizedBox(height: double.infinity, child: icon),
       title: title,
       subtitle: subtitle,
+      shape: RoundedRectangleBorder(
+          side: BorderSide(width: 1, color: Colors.blueGrey.shade100),
+          borderRadius: const BorderRadius.all(Radius.circular(15))),
       onTap: () {
         Navigator.pushNamed(context, "/view_log", arguments: log);
       },
@@ -66,20 +69,25 @@ class _PatrolLogsState extends State<PatrolLogs> {
           if (snapshot.hasData) {
             return Scaffold(
                 appBar: AppBar(
-                    title: Text("${snapshot.requireData.length} logs found"),
+                    title: const Text("Patrol logs"),
                     automaticallyImplyLeading: false,
                     actions: [
                       CloseButton(
                         onPressed: () => Navigator.pop(context),
                       )
                     ]),
-                body: ListView.builder(
-                  itemCount: snapshot.requireData.length,
-                  itemBuilder: (context, index) {
-                    final log = snapshot.requireData[index];
-                    return _getListTile(log);
-                  },
-                ));
+                body: Padding(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                    child: ListView.separated(
+                      itemCount: snapshot.requireData.length,
+                      itemBuilder: (context, index) {
+                        final log = snapshot.requireData[index];
+                        return _getListTile(log);
+                      },
+                      separatorBuilder: (BuildContext context, int index) =>
+                          const SizedBox(height: 10),
+                    )));
           } else {
             return Scaffold(
               appBar: AppBar(
