@@ -15,8 +15,9 @@ class ViewLog extends StatelessWidget {
   static const _verticalSpacer = SizedBox(height: 4);
 
   static const _textStyleLabel = TextStyle(
-      fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, fontSize: 10);
-  static const _fontStyleIncidentItem = TextStyle(fontStyle: FontStyle.italic);
+      fontStyle: FontStyle.italic, fontWeight: FontWeight.bold, fontSize: 12);
+  static const _textStyleContent =
+      TextStyle(fontStyle: FontStyle.italic, fontSize: 16);
 
   const ViewLog({super.key});
 
@@ -25,7 +26,7 @@ class ViewLog extends StatelessWidget {
       Padding(
           padding: const EdgeInsets.only(right: 15),
           child: Text("$label:", style: _textStyleLabel)),
-      Text(content)
+      Text(content, style: _textStyleContent)
     ]);
   }
 
@@ -155,19 +156,19 @@ class ViewLog extends StatelessWidget {
           flex: _incidentLocationColumnWidth,
           child: Text(
             incident.getIncidentLocationName(),
-            style: _fontStyleIncidentItem,
+            style: _textStyleContent,
           )),
       Expanded(
           flex: _incidentTimeColumnWidth,
           child: Text(
             _timeFormat.format(incident.timestamp),
-            style: _fontStyleIncidentItem,
+            style: _textStyleContent,
           )),
       Expanded(
           flex: _incidentCommentsColumnWidth,
           child: Text(
             incident.description ?? "",
-            style: _fontStyleIncidentItem,
+            style: _textStyleContent,
           )),
       Expanded(
           flex: _incidentOutcomeColumnWidth,
@@ -177,7 +178,7 @@ class ViewLog extends StatelessWidget {
                 : incident.policeAttended == true
                     ? "Y"
                     : "N",
-            style: _fontStyleIncidentItem,
+            style: _textStyleContent,
           )),
     ]);
   }
